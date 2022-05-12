@@ -7,7 +7,8 @@ LRESULT CALLBACK LowLevelMouseHookProc(int nCode, WPARAM wParam, LPARAM lParam){
     if(nCode < 0) 
         return CallNextHookEx(NULL, nCode, wParam, lParam);
     else
-        GlobalWindowInput::instance->mouseLL.OnMouseHookLL((MouseMessages)wParam, (MSLLHOOKSTRUCT*)lParam);
+        if(GlobalWindowInput::instance->mouseLL.OnMouseHookLL((MouseMessages)wParam, (MSLLHOOKSTRUCT*)lParam) == false) return 0;
+        
     return CallNextHookEx(NULL, nCode, wParam, lParam);
 }
 

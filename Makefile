@@ -1,10 +1,12 @@
 
-out		:= run.exe
+out     := run.exe
 
-objects	:= build/obj/Main.o
-objects	+= build/obj/GlobalWindowInput.o
-objects	+= build/obj/Notifyicon.o
-objects	+= build/obj/Window.o
+objects := build/obj/Main.o
+objects += build/obj/GlobalWindowInput.o
+objects += build/obj/Notifyicon.o
+objects += build/obj/Window.o
+objects += build/obj/AppNotifyicon.o
+objects += build/obj/App.o
 
 build: $(objects)
 	g++ -o build/$(out) $^ -lgdi32
@@ -14,7 +16,5 @@ run: build
 
 build/obj/%.o: src/%.cpp
 	g++ -c -o $@ $<
-
-
 
 .PHONY: build run

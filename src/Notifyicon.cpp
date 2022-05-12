@@ -19,6 +19,10 @@ LRESULT Notifyicon::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) n
         NotifyiconProc(wParam, lParam);
         return 0;
     }
+    else if(msg == WM_COMMAND){
+        OnCommand(wParam);
+        return 0;
+    }
     else
         return DefWindowProc(hWnd, msg, wParam, lParam);
 }

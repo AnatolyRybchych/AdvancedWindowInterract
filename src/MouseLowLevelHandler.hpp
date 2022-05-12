@@ -5,5 +5,5 @@
 class MouseLowLevelHandler
 {
 public:
-    virtual void OnMouseHookLL(MouseMessages message, MSLLHOOKSTRUCT *args) noexcept = 0;
+    virtual bool OnMouseHookLL(MouseMessages message, MSLLHOOKSTRUCT *args) noexcept = 0;
 };

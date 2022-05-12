@@ -5,5 +5,5 @@
 class KeyboardLowLevelHandler
 {
 public:
-    virtual void OnKeyboardHookLL(KeyboardMessages message, KBDLLHOOKSTRUCT *args) noexcept = 0;
+    virtual bool OnKeyboardHookLL(KeyboardMessages message, KBDLLHOOKSTRUCT *args) noexcept = 0;
 };
