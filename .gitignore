@@ -1,4 +1,4 @@
 #vscode data
-.vscode*
+.vscode/*
 #object files
-build/obj*
+build/obj/*
