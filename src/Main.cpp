@@ -1,7 +1,7 @@
 
 #include "GlobalWindowInput.hpp"
 #include "Window.hpp"
-#include "TrayWindow.hpp"
+#include "Notifyicon.hpp"
 
 class InputManager : public MouseLowLevelHandler, public KeyboardLowLevelHandler{
 public:
@@ -13,13 +13,13 @@ public:
     }
 };
 
-class Tray: public TrayWindow{
+class Tray: public Notifyicon{
 protected:
     void NotifyiconProc(WPARAM wParam, LPARAM lParam) noexcept{
         //MessageBox(0, L"", L"", 0);
     }
 public:
-    Tray(HINSTANCE hInstance):TrayWindow(hInstance){
+    Tray(HINSTANCE hInstance):Notifyicon(hInstance){
 
     }
 };

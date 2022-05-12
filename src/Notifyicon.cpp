@@ -1,8 +1,8 @@
-#include "TrayWindow.hpp"
+#include "Notifyicon.hpp"
 
-int TrayWindow::counter = 0;
+int Notifyicon::counter = 0;
 
-TrayWindow::TrayWindow(HINSTANCE hInstance)
+Notifyicon::Notifyicon(HINSTANCE hInstance)
         :Window(hInstance, (std::wstring() + L"NotifyiconWnd" + std::to_wstring(counter++)).c_str(), L"NotifyiconWindow_(should be hidden)", 0, 0, 0, 0, WS_POPUPWINDOW){
     NOTIFYICONDATA notifyiconData;
     memset(&notifyiconData, 0, sizeof(notifyiconData));
@@ -14,7 +14,7 @@ TrayWindow::TrayWindow(HINSTANCE hInstance)
     Shell_NotifyIcon(NIM_ADD, &notifyiconData);
 }
 
-LRESULT TrayWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept{
+LRESULT Notifyicon::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept{
     if(msg == TrayMessage){
         NotifyiconProc(wParam, lParam);
         return 0;
@@ -23,7 +23,7 @@ LRESULT TrayWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) n
         return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-void TrayWindow::SetIcon(HICON icon) const noexcept{
+void Notifyicon::SetIcon(HICON icon) const noexcept{
     NOTIFYICONDATA notifyiconData;
     memset(&notifyiconData, 0, sizeof(notifyiconData));
     notifyiconData.cbSize = sizeof(notifyiconData);
@@ -34,7 +34,7 @@ void TrayWindow::SetIcon(HICON icon) const noexcept{
     Shell_NotifyIcon(NIM_MODIFY, &notifyiconData);
 }
 
-void TrayWindow::SetInfo(std::wstring info) const noexcept{
+void Notifyicon::SetInfo(std::wstring info) const noexcept{
     NOTIFYICONDATA notifyiconData;
     memset(&notifyiconData, 0, sizeof(notifyiconData));
     notifyiconData.cbSize = sizeof(notifyiconData);
@@ -54,7 +54,7 @@ void TrayWindow::SetInfo(std::wstring info) const noexcept{
     Shell_NotifyIcon(NIM_MODIFY, &notifyiconData);
 }
 
-void TrayWindow::Show() const noexcept{
+void Notifyicon::Show() const noexcept{
     NOTIFYICONDATA notifyiconData;
     memset(&notifyiconData, 0, sizeof(notifyiconData));
     notifyiconData.cbSize = sizeof(notifyiconData);
@@ -66,7 +66,7 @@ void TrayWindow::Show() const noexcept{
     Shell_NotifyIcon(NIM_MODIFY, &notifyiconData);
 }
 
-void TrayWindow::Hide() const noexcept{
+void Notifyicon::Hide() const noexcept{
     NOTIFYICONDATA notifyiconData;
     memset(&notifyiconData, 0, sizeof(notifyiconData));
     notifyiconData.cbSize = sizeof(notifyiconData);
@@ -79,7 +79,7 @@ void TrayWindow::Hide() const noexcept{
 }
     
 
-TrayWindow::~TrayWindow(){
+Notifyicon::~Notifyicon(){
     NOTIFYICONDATA notifyiconData;
     memset(&notifyiconData, 0, sizeof(notifyiconData));
     notifyiconData.cbSize = sizeof(notifyiconData);

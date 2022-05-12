@@ -3,7 +3,7 @@ out		:= run.exe
 
 objects	:= build/obj/Main.o
 objects	+= build/obj/GlobalWindowInput.o
-objects	+= build/obj/TrayWindow.o
+objects	+= build/obj/Notifyicon.o
 objects	+= build/obj/Window.o
 
 build: $(objects)

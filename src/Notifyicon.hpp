@@ -2,7 +2,7 @@
 
 #include "Window.hpp"
 
-class TrayWindow: private Window{
+class Notifyicon: private Window{
 private:
     static int counter;
     static constexpr UINT TrayMessage = WM_USER + 1;
@@ -16,6 +16,6 @@ public:
     void SetInfo(std::wstring info) const noexcept;
     void Show() const noexcept;
     void Hide() const noexcept;
-    TrayWindow(HINSTANCE hInstance);
-    virtual ~TrayWindow();
+    Notifyicon(HINSTANCE hInstance);
+    virtual ~Notifyicon();
 };
