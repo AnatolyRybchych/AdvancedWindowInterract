@@ -1,6 +1,6 @@
 #include "App.hpp"
 
-App::App(HINSTANCE hInstance) :appNotifyicon(hInstance){
+App::App(HINSTANCE hInstance) :appNotifyicon(hInstance), window(hInstance){
     this->hInstance = hInstance;
     isAltDown = false;
 }
@@ -8,8 +8,8 @@ App::App(HINSTANCE hInstance) :appNotifyicon(hInstance){
 int App::Run(){
     GlobalWindowInput::Init(*this, *this);
     appNotifyicon.SetIcon(LoadIcon(NULL, IDI_APPLICATION));
-    
 
+    ShowWindow(window.GetHWnd(), SW_NORMAL);
     int exitCode = StartWindowLoop();
 
 

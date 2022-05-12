@@ -2,12 +2,14 @@
 
 #include "GlobalWindowInput.hpp"
 #include "AppNotifyicon.hpp"
+#include "MainWindow.hpp"
 
 class App: public MouseLowLevelHandler, public KeyboardLowLevelHandler{
 private:
     bool isAltDown;
     AppNotifyicon appNotifyicon;
     HINSTANCE hInstance;
+    MainWindow window;
 
     int StartWindowLoop();
 protected:
