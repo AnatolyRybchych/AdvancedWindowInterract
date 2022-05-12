@@ -8,6 +8,7 @@ objects += build/obj/Window.o
 objects += build/obj/AppNotifyicon.o
 objects += build/obj/App.o
 objects += build/obj/MainWindow.o
+objects += build/obj/WindowParams.o
 
 build: $(objects)
 	g++ -o build/$(out) $^ -lgdi32

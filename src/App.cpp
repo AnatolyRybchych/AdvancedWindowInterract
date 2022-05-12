@@ -8,8 +8,6 @@ App::App(HINSTANCE hInstance) :appNotifyicon(hInstance), window(hInstance){
 int App::Run(){
     GlobalWindowInput::Init(*this, *this);
     appNotifyicon.SetIcon(LoadIcon(NULL, IDI_APPLICATION));
-
-    ShowWindow(window.GetHWnd(), SW_NORMAL);
     int exitCode = StartWindowLoop();
 
 
@@ -30,9 +28,14 @@ bool App::OnKeyDown(KBDLLHOOKSTRUCT *args){
         switch (args->vkCode)
         {
         case VK_MENU:
-        case VK_LMENU:
+        case VK_LMENU:{
+            if(isAltDown == false){   
+                POINT cursorPos;
+                if(GetCursorPos(&cursorPos))
+                    window.Show(WindowFromPoint(cursorPos));
+            }
             isAltDown = true;
-            break;
+        }break;
         }
         return true;
     }
@@ -44,6 +47,7 @@ bool App::OnKeyUp(KBDLLHOOKSTRUCT *args){
         case VK_MENU:
         case VK_LMENU:
             isAltDown = false;
+            window.Hide();
             break;
         }
         return false;
