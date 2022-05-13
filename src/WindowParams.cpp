@@ -2,6 +2,9 @@
 
 WindowParams::WindowParams(HWND window){
     hWnd = window;
+    isSystemWindow = false;
+
+    
     
 }
 

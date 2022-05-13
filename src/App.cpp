@@ -32,7 +32,7 @@ bool App::OnKeyDown(KBDLLHOOKSTRUCT *args){
             if(isAltDown == false){   
                 POINT cursorPos;
                 if(GetCursorPos(&cursorPos))
-                    window.Show(WindowFromPoint(cursorPos));
+                    window.Show(GetAncestor(WindowFromPoint(cursorPos), GA_ROOTOWNER));
             }
             isAltDown = true;
         }break;

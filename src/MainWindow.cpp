@@ -26,8 +26,6 @@ void MainWindow::DefineWindowView() noexcept{
     RECT wndRect;
     GetWindowRect(windowOverParams->GetHWnd(), &wndRect);
     SetWindowPos(GetHWnd(), HWND_TOPMOST, wndRect.left, wndRect.top, wndRect.right - wndRect.left, wndRect.bottom - wndRect.top, 0);
-
-    
 }
 
 void MainWindow::Show(HWND over) noexcept{
