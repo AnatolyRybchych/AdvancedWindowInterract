@@ -1,9 +1,14 @@
 #include "MainWindow.hpp"
 
 MainWindow::MainWindow(HINSTANCE hInstance)
-    :Window(hInstance, L"MWCls", L"MainWindow", 0, 0, 120, 30, WS_POPUP, nullptr, WS_EX_LAYERED | WS_EX_TOOLWINDOW | WS_EX_TOPMOST){
+    :Window(hInstance, L"MWCls", L"MainWindow", 0, 0, 120, 30, WS_POPUP, nullptr, WS_EX_LAYERED | WS_EX_TOOLWINDOW | WS_EX_TOPMOST)
+    , content(hInstance, GetHWnd())
+{
     SetLayeredWindowAttributes(GetHWnd(), 0, 100, LWA_ALPHA);
     windowOverParams = nullptr;
+
+    ShowWindow(CreateWindow(L"STATIC", L"text1",  WS_CHILD | SS_CENTER, 0, 0, 100, 40, content.GetHWnd(), nullptr, hInstance, nullptr), SW_NORMAL);
+    ShowWindow(CreateWindow(L"STATIC", L"text2",  WS_CHILD | SS_CENTER, 0, 0, 100, 40, content.GetHWnd(), nullptr, hInstance, nullptr), SW_NORMAL);
 }
 
 
@@ -26,6 +31,8 @@ void MainWindow::DefineWindowView() noexcept{
     RECT wndRect;
     GetWindowRect(windowOverParams->GetHWnd(), &wndRect);
     SetWindowPos(GetHWnd(), HWND_TOPMOST, wndRect.left, wndRect.top, wndRect.right - wndRect.left, wndRect.bottom - wndRect.top, 0);
+
+    content.Validate();
 }
 
 void MainWindow::Show(HWND over) noexcept{

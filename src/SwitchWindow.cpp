@@ -22,7 +22,7 @@ void SwitchWindow::AddOnSwitchHandler(std::function<void(bool)> onSwitch) noexce
 }
 
 void SwitchWindow::RemoveOnSwitchHandler(std::function<void(bool)> onSwitch) noexcept{
-    switchHandlers.erase(std::find(switchHandlers.begin(), switchHandlers.end(), onSwitch));
+    //switchHandlers.erase(std::find(switchHandlers.begin(), switchHandlers.end(), onSwitch));
 }
 
 SwitchWindow::~SwitchWindow(){
