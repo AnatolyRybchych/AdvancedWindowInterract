@@ -44,6 +44,16 @@ LRESULT HorisontalStackPanel::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM
         GetClientRect(GetParent(hWnd), &parentRect);
         SetWindowPos(hWnd, 0, 0, 0, parentRect.right, parentRect.bottom, SWP_NOZORDER);
     }
+    case WM_PAINT:{
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+
+        HBRUSH bg = CreateSolidBrush(0x050505);
+        FillRect(hdc, &ps.rcPaint, bg);
+        DeleteObject(bg);
+
+        EndPaint(hWnd, &ps);
+    } return 0;
     case WM_VALIDATE:
     case WM_CHILDACTIVATE:{
         HSPLocateChildsParams params;

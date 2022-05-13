@@ -1,9 +1,5 @@
 #include "SwitchWindow.hpp"
 
-#define TO_INT(val) ((int)(val))
-#define RGBAHEX(hex) (Gdiplus::Color((TO_INT(hex) & 0xff000000) >> 24 ,(TO_INT(hex) & 0x00ff0000) >> 16, (TO_INT(hex) & 0x0000ff00) >> 8, (TO_INT(hex) & 0x000000ff)))
-#define RGBHEX(hex) (Gdiplus::Color((TO_INT(hex) & 0x00ff0000) >> 16, (TO_INT(hex) & 0x0000ff00) >> 8, (TO_INT(hex) & 0x000000ff)))
-
 int SwitchWindow::counter = 0;
 
 LRESULT SwitchWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept{
@@ -45,7 +41,6 @@ LRESULT SwitchWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             bgTrigger = bg->Clone();
 
         g.FillRectangle(bg, Gdiplus::Rect(client.left, client.top, client.right, client.bottom));
-        g.DrawRectangle(fg, Gdiplus::Rect(client.left, client.top, client.right, client.bottom));
         wchar_t text[100];
         int textLen = GetWindowText(hWnd, text, 100);
         Gdiplus::StringFormat fmt;
@@ -147,9 +142,11 @@ RECT SwitchWindow::GetSwitchBounds(const RECT &client) const noexcept{
 }
 
 void SwitchWindow::DrawSwitchTrigger(Gdiplus::Graphics &g, const Gdiplus::Brush *b, const Gdiplus::Pen *p, const RECT &bounds, float progress) const noexcept{
+    int border = 0;
+    if(p != nullptr) border = p->GetWidth();
     Gdiplus::GraphicsPath path;
-    int height = (bounds.bottom - bounds.top);
-    path.AddEllipse(bounds.left + (int)((bounds.right - bounds.left - height) * progress), bounds.top, height, height);
+    int height = (bounds.bottom - bounds.top - border);
+    path.AddEllipse(bounds.left + (int)((bounds.right - bounds.left - height - border) * progress), bounds.top, height, height);
 
     if(b != nullptr)
         g.FillPath(b, &path);
@@ -158,13 +155,16 @@ void SwitchWindow::DrawSwitchTrigger(Gdiplus::Graphics &g, const Gdiplus::Brush 
 }
 
 void SwitchWindow::DrawSwitchBorder(Gdiplus::Graphics &g, const Gdiplus::Brush *b, const Gdiplus::Pen *p, const RECT &bounds) const noexcept{
-    int d = bounds.bottom - bounds.top;
+    int border = 0;
+    if(p != nullptr) border = p->GetWidth();
+    int d = bounds.bottom - bounds.top - border;
 
     Gdiplus::GraphicsPath path;
+    
 
     path.AddBezier(
-        Gdiplus::Point(bounds.left + d / 2, bounds.bottom),
-        Gdiplus::Point(bounds.left + d / 4, bounds.bottom),
+        Gdiplus::Point(bounds.left + d / 2, bounds.bottom - border),
+        Gdiplus::Point(bounds.left + d / 4, bounds.bottom - border),
         Gdiplus::Point(bounds.left, bounds.top + d * 3 / 4),
         Gdiplus::Point(bounds.left, bounds.top + d / 2)
     );
@@ -176,16 +176,17 @@ void SwitchWindow::DrawSwitchBorder(Gdiplus::Graphics &g, const Gdiplus::Brush *
     );
     path.AddBezier(
         Gdiplus::Point(bounds.left + d * 3 / 2, bounds.top),
-        Gdiplus::Point(bounds.right - d / 4, bounds.top),
-        Gdiplus::Point(bounds.right, bounds.top + d / 4),
-        Gdiplus::Point(bounds.right, bounds.top + d / 2)
+        Gdiplus::Point(bounds.right - border - d / 4, bounds.top),
+        Gdiplus::Point(bounds.right - border, bounds.top + d / 4),
+        Gdiplus::Point(bounds.right - border, bounds.top + d / 2)
     );
     path.AddBezier(
-        Gdiplus::Point(bounds.right, bounds.top + d / 2),
-        Gdiplus::Point(bounds.right, bounds.bottom - d / 4),
-        Gdiplus::Point(bounds.right - d / 4, bounds.bottom),
-        Gdiplus::Point(bounds.right - d / 2, bounds.bottom)
+        Gdiplus::Point(bounds.right - border, bounds.top + d / 2),
+        Gdiplus::Point(bounds.right - border, bounds.bottom - d / 4 - border),
+        Gdiplus::Point(bounds.right - border - d / 4, bounds.bottom - border),
+        Gdiplus::Point(bounds.right - border - d / 2, bounds.bottom - border)
     );
+    path.CloseFigure();
 
     if(b != nullptr)
         g.FillPath(b, &path);

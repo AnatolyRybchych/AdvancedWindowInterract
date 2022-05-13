@@ -8,6 +8,10 @@
 
 #include <gdiplus.h>
 
+#define TO_INT(val) ((int)(val))
+#define RGBAHEX(hex) (Gdiplus::Color((TO_INT(hex) & 0xff000000) >> 24 ,(TO_INT(hex) & 0x00ff0000) >> 16, (TO_INT(hex) & 0x0000ff00) >> 8, (TO_INT(hex) & 0x000000ff)))
+#define RGBHEX(hex) (Gdiplus::Color((TO_INT(hex) & 0x00ff0000) >> 16, (TO_INT(hex) & 0x0000ff00) >> 8, (TO_INT(hex) & 0x000000ff)))
+
 class SwitchWindow: public Window{
 private:
     float progress = 0.0;

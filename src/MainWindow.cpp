@@ -1,14 +1,14 @@
 #include "MainWindow.hpp"
 
 MainWindow::MainWindow(HINSTANCE hInstance)
-    :Window(hInstance, L"MWCls", L"MainWindow", 0, 0, 120, 30, WS_POPUP, nullptr, WS_EX_LAYERED | WS_EX_TOOLWINDOW | WS_EX_TOPMOST)
+    :Window(hInstance, L"MWCls", L"MainWindow", 0, 0, 120, 30, WS_POPUP, nullptr, WS_EX_TOOLWINDOW | WS_EX_TOPMOST | WS_EX_LAYERED)
     , content(hInstance, GetHWnd())
     , sw1(hInstance, 0, 0, 100, 100, L"Topmost", content.GetHWnd())
     , sw2(hInstance, 0, 0, 100, 100, L"Hide icon", content.GetHWnd())
 {
-    SetLayeredWindowAttributes(GetHWnd(), 0, 150, LWA_ALPHA);
     windowOverParams = nullptr;
 
+    SetLayeredWindowAttributes(GetHWnd(), 0, 200, LWA_ALPHA);
 
     ShowWindow(sw1.GetHWnd(), SW_NORMAL);
     ShowWindow(sw2.GetHWnd(), SW_NORMAL);
@@ -16,7 +16,11 @@ MainWindow::MainWindow(HINSTANCE hInstance)
 
 
 LRESULT MainWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept{
-    return DefWindowProc(hWnd, msg, wParam, lParam);
+    switch (msg)
+    {
+    default:
+        return DefWindowProc(hWnd, msg, wParam, lParam);
+    }
 }
 
 void MainWindow::InspectWindowOver(HWND over) noexcept{
