@@ -13,7 +13,7 @@ objects += build/obj/SwitchWindow.o
 objects += build/obj/HorisontalStackPanel.o
 
 build: $(objects)
-	g++ -o build/$(out) $^ -lgdi32
+	g++ -o build/$(out) $^ -lgdi32 -lgdiplus
 
 run: build
 	./build/$(out)
