@@ -10,8 +10,9 @@ private:
     WindowParams *windowOverParams;
     HorisontalStackPanel content;
 
-    SwitchWindow sw1;
-    SwitchWindow sw2;
+    SwitchWindow swTopmost;
+    SwitchWindow swHideIcon;
+    SwitchWindow swAlttab;
 protected:
     LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept override;
     void InspectWindowOver(HWND over) noexcept;

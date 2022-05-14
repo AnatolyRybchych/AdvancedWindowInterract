@@ -3,98 +3,29 @@
 int SwitchWindow::counter = 0;
 
 LRESULT SwitchWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept{
-
     switch(msg){
     case WM_PAINT:{
         RECT client = GetClientRect();
-        RECT swBounds = GetSwitchBounds(client);
 
         PAINTSTRUCT ps;
         Gdiplus::Graphics wndG(BeginPaint(hWnd, &ps));
         Gdiplus::Bitmap buffer(client.right, client.bottom);
-        Gdiplus::Graphics g(&buffer);
-        g.SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeAntiAlias);
-
-        Gdiplus::SolidBrush *bg;
-        Gdiplus::SolidBrush *bgTrigger;
-        Gdiplus::SolidBrush *bgSw;
-        Gdiplus::Pen *fg;
-
-        if(isMouseDown){
-            bg = new Gdiplus::SolidBrush(RGBHEX(0x050505));
-            bgSw = new Gdiplus::SolidBrush(RGBHEX(0x000000));
-            fg = new Gdiplus::Pen(RGBHEX(0xaaaaff), 2.0f);
-        }
-        else if(isMouseOver){
-            bg = new Gdiplus::SolidBrush(RGBHEX(0x050505));
-            bgSw = new Gdiplus::SolidBrush(RGBHEX(0x000000));
-            fg = new Gdiplus::Pen(RGBHEX(0xaaaaaa), 2.0f);
-        }
-        else{
-            bg = new Gdiplus::SolidBrush(RGBHEX(0x353535));
-            bgSw = new Gdiplus::SolidBrush(RGBHEX(0x252525));
-            fg = new Gdiplus::Pen(RGBHEX(0xaaaaaa), 2.0f);
-        }
-        if(isAnimation)
-            bgTrigger = new Gdiplus::SolidBrush(RGBHEX(0xaaaaff));
-        else 
-            bgTrigger = bg->Clone();
-
-        g.FillRectangle(bg, Gdiplus::Rect(client.left, client.top, client.right, client.bottom));
-        wchar_t text[100];
-        int textLen = GetWindowText(hWnd, text, 100);
-        Gdiplus::StringFormat fmt;
-        fmt.SetAlignment(Gdiplus::StringAlignment::StringAlignmentCenter);
-        fmt.SetLineAlignment(Gdiplus::StringAlignment::StringAlignmentCenter);
-        Gdiplus::FontFamily family(L"Arial");
-        Gdiplus::Font font(&family, 14);
-        Gdiplus::SolidBrush textColor(RGBHEX(0xaaaaff));
-        g.DrawString(text, textLen, &font, Gdiplus::RectF(0, 0, client.right, client.bottom / 2), &fmt, &textColor);
-
-        DrawSwitchBorder(g, bgSw, fg, swBounds);
-        DrawSwitchTrigger(g, bgTrigger, fg, swBounds, progress);
-
-        wndG.DrawImage(&buffer, Gdiplus::Rect(0, 0, client.right, client.bottom));
-        EndPaint(hWnd, &ps);
-        delete bg;
-        delete fg;
-        delete bgTrigger;
-    } return 0;
-    case WM_LBUTTONDOWN:{
-        if(isMouseDown == false){
-            isMouseDown = true;
-            if(isAnimation == false){
-                isAnimation = true;
-                OnSwitch(!switchStatus);
-                SetTimer(hWnd, 0, 20, nullptr);
-            }
-            InvalidateRect(hWnd, nullptr, true);
-        }
-    } return 0;
-    case WM_TIMER:{
-        if(switchStatus)
-            progress += 0.1;
-        else
-            progress -= 0.1;
         
-        if(progress < 0){
-            progress = 0;
-            isAnimation = false;
-        }
-        if(progress > 1){
-            progress = 1;
-            isAnimation = false;
-        }
-        if(isAnimation == false)
-            KillTimer(hWnd, 0);
-        InvalidateRect(hWnd, nullptr, true);
-    }return 0;
-    case WM_LBUTTONUP:{
-        if(isMouseDown){
-            isMouseDown = false;
-            InvalidateRect(hWnd, nullptr, true);
-        }
+        Gdiplus::Graphics g(&buffer);
+        OnPaint(g);
+        wndG.DrawImage(&buffer, Gdiplus::Rect(0, 0, client.right, client.bottom));
+        
+        EndPaint(hWnd, &ps);
     } return 0;
+    case WM_LBUTTONDOWN:
+        OnMouseDown();
+     return 0;
+    case WM_TIMER:
+        OnTimer();
+    return 0;
+    case WM_LBUTTONUP:
+        OnMouseUp();
+     return 0;
     case WM_ERASEBKGND: return true;
     case WM_MOUSEMOVE:{
         TRACKMOUSEEVENT tme{
@@ -104,28 +35,129 @@ LRESULT SwitchWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             .dwHoverTime = 1,
         };
         TrackMouseEvent(&tme);
-    }return 0;
-    case WM_MOUSEHOVER:{
-        if(isMouseOver == false){
-            isMouseOver = true;
-            InvalidateRect(hWnd, nullptr, true);
-        }
+        OnMouseMove();
     } return 0;
-    case WM_MOUSELEAVE:{
-        if(isMouseDown || isMouseOver){
-            isMouseOver = false;
-            isMouseDown = false;
-            InvalidateRect(hWnd, nullptr, true);
-        }
-    } return 0;
-    case WM_DESTROY:{
-
-    } return 0;
-    default:{
+    case WM_MOUSEHOVER:
+        OnMouseEnter();
+        return 0;
+    case WM_MOUSELEAVE:
+        OnMouseLeave();
+        return 0;
+    case WM_DESTROY:
+        return 0;
+    default:
         return DefWindowProc(hWnd, msg,wParam, lParam);
     }
+}
+
+void SwitchWindow::OnPaint(Gdiplus::Graphics &g) noexcept{
+    g.SetSmoothingMode(Gdiplus::SmoothingMode::SmoothingModeAntiAlias);
+
+    Gdiplus::SolidBrush *bg;
+    Gdiplus::SolidBrush *bgTrigger;
+    Gdiplus::SolidBrush *bgSw;
+    Gdiplus::Pen *fg;
+    RECT client = GetClientRect();
+    RECT swBounds = GetSwitchBounds(client);
+
+    if(isMouseDown){
+        bg = new Gdiplus::SolidBrush(RGBHEX(0x050505));
+        bgSw = new Gdiplus::SolidBrush(RGBHEX(0x000000));
+        fg = new Gdiplus::Pen(RGBHEX(0xaaaaff), 2.0f);
+    }
+    else if(isMouseOver){
+        bg = new Gdiplus::SolidBrush(RGBHEX(0x050505));
+        bgSw = new Gdiplus::SolidBrush(RGBHEX(0x000000));
+        fg = new Gdiplus::Pen(RGBHEX(0xaaaaaa), 2.0f);
+    }
+    else{
+        bg = new Gdiplus::SolidBrush(RGBHEX(0x353535));
+        bgSw = new Gdiplus::SolidBrush(RGBHEX(0x252525));
+        fg = new Gdiplus::Pen(RGBHEX(0xaaaaaa), 2.0f);
+    }
+
+    if(isAnimation) bgTrigger = new Gdiplus::SolidBrush(RGBHEX(0xaaaaff));
+    else bgTrigger = bg->Clone();
+
+    g.FillRectangle(bg, Gdiplus::Rect(client.left, client.top, client.right, client.bottom));
+
+    {//draw text
+        wchar_t text[100];
+        int textLen = GetWindowText(GetHWnd(), text, 100);
+        Gdiplus::StringFormat fmt;
+        fmt.SetAlignment(Gdiplus::StringAlignment::StringAlignmentCenter);
+        fmt.SetLineAlignment(Gdiplus::StringAlignment::StringAlignmentCenter);
+        Gdiplus::FontFamily family(L"Arial");
+        Gdiplus::Font font(&family, 14);
+        Gdiplus::SolidBrush textColor(RGBHEX(0xaaaaff));
+        g.DrawString(text, textLen, &font, Gdiplus::RectF(0, 0, client.right, client.bottom / 2), &fmt, &textColor);
+    }
+
+    DrawSwitchBorder(g, bgSw, fg, swBounds);
+    DrawSwitchTrigger(g, bgTrigger, fg, swBounds, progress);
+
+    delete bg;
+    delete fg;
+    delete bgTrigger;
+}
+
+void SwitchWindow::OnMouseMove() noexcept{
+
+}
+
+void SwitchWindow::OnMouseEnter() noexcept{
+    if(isMouseOver == false){
+        isMouseOver = true;
+        InvalidateRect(GetHWnd(), nullptr, true);
     }
 }
+
+void SwitchWindow::OnMouseLeave() noexcept{
+    if(isMouseDown || isMouseOver){
+        isMouseOver = false;
+        isMouseDown = false;
+        InvalidateRect(GetHWnd(), nullptr, true);
+    }
+}
+
+void SwitchWindow::OnMouseDown() noexcept{
+    if(isMouseDown == false){
+            isMouseDown = true;
+            if(isAnimation == false){
+                isAnimation = true;
+                OnSwitch(!switchStatus);
+                SetTimer(GetHWnd(), 0, 20, nullptr);
+            }
+            InvalidateRect(GetHWnd(), nullptr, true);
+        }
+}
+
+void SwitchWindow::OnMouseUp() noexcept{
+    if(isMouseDown){
+        isMouseDown = false;
+        InvalidateRect(GetHWnd(), nullptr, true);
+    }
+}
+
+void SwitchWindow::OnTimer() noexcept{
+    if(switchStatus)
+        progress += 0.1;
+    else
+        progress -= 0.1;
+    
+    if(progress < 0){
+        progress = 0;
+        isAnimation = false;
+    }
+    if(progress > 1){
+        progress = 1;
+        isAnimation = false;
+    }
+    if(isAnimation == false)
+        KillTimer(GetHWnd(), 0);
+    InvalidateRect(GetHWnd(), nullptr, true);
+}
+
 
 RECT SwitchWindow::GetClientRect() const noexcept{
     RECT res;
@@ -196,11 +228,6 @@ void SwitchWindow::DrawSwitchBorder(Gdiplus::Graphics &g, const Gdiplus::Brush *
 
 SwitchWindow::SwitchWindow(HINSTANCE hInstance, int x, int y, int width, int height, std::wstring title, HWND parent)
     :Window(hInstance, std::wstring() + L"SwWnd_" = std::to_wstring(counter++), title, x, y, width, height, WS_CHILD, parent, 0){
-    switchStatus = false;
-
-    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-    Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-    
 }
 
 void SwitchWindow::OnSwitch(bool status) noexcept{
@@ -224,5 +251,4 @@ bool SwitchWindow::GetSwitchStatus() const noexcept{
 }
 
 SwitchWindow::~SwitchWindow(){
-    Gdiplus::GdiplusShutdown(gdiplusToken);
 }

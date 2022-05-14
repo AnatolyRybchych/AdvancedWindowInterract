@@ -8,6 +8,7 @@ private:
 protected:
     LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept override;
 public:
+    SIZE GetContentSize() const noexcept;
     HorisontalStackPanel(HINSTANCE hInstance, HWND parent);
     void Validate() const noexcept;
 };

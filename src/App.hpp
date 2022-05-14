@@ -11,6 +11,8 @@ private:
     HINSTANCE hInstance;
     MainWindow window;
 
+    ULONG_PTR gdiplusToken;
+
     int StartWindowLoop();
 protected:
     bool OnKeyDown(KBDLLHOOKSTRUCT *args);

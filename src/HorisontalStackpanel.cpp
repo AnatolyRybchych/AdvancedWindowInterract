@@ -59,13 +59,19 @@ LRESULT HorisontalStackPanel::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM
         HSPLocateChildsParams params;
         memset(&params, 0, sizeof(params));
         GetClientRect(hWnd, &params.parentRect);
-        EnumChildWindows(hWnd, CalcChildsRectSize, (LPARAM)&params.childsRectSize);
+        params.childsRectSize = GetContentSize();
         params.currX = ((params.parentRect.right - params.parentRect.left) - params.childsRectSize.cx) / 2;
         EnumChildWindows(hWnd, LocateChilds, (LPARAM)&params);
     }return 0;
     default:
         return DefWindowProc(hWnd, msg, wParam, lParam);
     }
+}
+
+SIZE HorisontalStackPanel::GetContentSize() const noexcept{
+    SIZE res = {0, 0};
+    EnumChildWindows(GetHWnd(), CalcChildsRectSize, (LPARAM)&res);
+    return res;
 }
 
 HorisontalStackPanel::HorisontalStackPanel(HINSTANCE hInstance, HWND parent) 

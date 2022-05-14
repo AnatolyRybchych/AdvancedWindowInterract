@@ -19,13 +19,21 @@ private:
     bool isMouseOver = false;
     bool isAnimation = false;
 
-    bool switchStatus;
+    bool switchStatus = false;
     static int counter;
-    ULONG_PTR gdiplusToken;
+    
     std::vector<std::function<void(bool)>> switchHandlers;
 protected:
     LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept override;
     void OnSwitch(bool status) noexcept;
+
+    void OnPaint(Gdiplus::Graphics &g) noexcept;
+    void OnMouseMove() noexcept;
+    void OnMouseEnter() noexcept;
+    void OnMouseLeave() noexcept;
+    void OnMouseDown() noexcept;
+    void OnMouseUp() noexcept;
+    void OnTimer() noexcept;
 
     void DrawSwitchBorder(Gdiplus::Graphics &g, const Gdiplus::Brush *b, const Gdiplus::Pen *p, const RECT &bounds) const noexcept;
     void DrawSwitchTrigger(Gdiplus::Graphics &g, const Gdiplus::Brush *b, const Gdiplus::Pen *p, const RECT &bounds, float progress) const noexcept;

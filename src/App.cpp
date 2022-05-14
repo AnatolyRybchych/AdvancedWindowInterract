@@ -6,12 +6,17 @@ App::App(HINSTANCE hInstance) :appNotifyicon(hInstance), window(hInstance){
 }
 
 int App::Run(){
+    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+    Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
     GlobalWindowInput::Init(*this, *this);
     appNotifyicon.SetIcon(LoadIcon(NULL, IDI_APPLICATION));
     int exitCode = StartWindowLoop();
 
 
     GlobalWindowInput::Dispose();
+    Gdiplus::GdiplusShutdown(gdiplusToken);
+    
     return exitCode;
 }
 
