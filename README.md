@@ -1,7 +1,7 @@
 # AdvancedWindwoInterract
 
 ## Press Alt + Win to open window settings
-![menu demo](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/thumbnail_menu.mp4)
+![menu demo](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/thumbnail_application_menu.gif)
 
 > Topmost
 * Makes window allways over others
@@ -12,7 +12,7 @@
 * Creates notifyicon with application icon
 * press notifyicon to show / hide binded window
 
-![notifyicons of external applications](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/external_notifyicons.png)
+![notifyicons of external applications](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/thumbnail_external_notifyicons.png)
 ## To exit button on notifyicon to exit:
-![application notifyicon](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/notifyicon.png) 
-![application exit button](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/application_exit_button.mp4)
+![application notifyicon](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/thumbnail_notifyicon.png) 
+![application exit button](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/thumbnail_application_exit_button.mp4)
