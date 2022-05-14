@@ -23,13 +23,16 @@ MainWindow::MainWindow(HINSTANCE hInstance)
 void MainWindow::OnSwitchTopmost(bool status) noexcept{
     if(windowOverParams != nullptr){
         windowOverParams->SetTopmost(status);
+        SetWindowPos(GetHWnd(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
         swTopmost.SetSwitchStatus(windowOverParams->IsTopmost());
     }
+    
 }
 
 void MainWindow::OnSwitchHideIcon(bool status) noexcept{
     if(windowOverParams != nullptr){
         windowOverParams->SetHideIcon(status);
+        SetWindowPos(GetHWnd(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
         swHideIcon.SetSwitchStatus(windowOverParams->IsHideIcon());
     }
 }
