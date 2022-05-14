@@ -2,6 +2,7 @@
 
 #define NOT_NULL(a, b) ((a) != 0 ? (a) : (b)) 
 
+
 void ExternalAppNotifyicon::NotifyiconProc(WPARAM wParam, LPARAM lParam) noexcept{
     switch (lParam)
     {
@@ -15,11 +16,15 @@ void ExternalAppNotifyicon::NotifyiconProc(WPARAM wParam, LPARAM lParam) noexcep
         }
         break;
     }
+
+    if(IsWindow(GetExternalHWnd()) == false)
+        Hide();
 }
 
 void ExternalAppNotifyicon::OnCommand(WPARAM wParam) noexcept{
-
+    
 }
+
 
 ExternalAppNotifyicon::ExternalAppNotifyicon(HINSTANCE hInstance, HWND externalWindow)
     :Notifyicon(hInstance){
@@ -48,5 +53,4 @@ bool ExternalAppNotifyicon::IsVisible() const noexcept{
 }
 
 ExternalAppNotifyicon::~ExternalAppNotifyicon() noexcept{
-    
 }
