@@ -12,7 +12,7 @@ private:
 protected:
     void NotifyiconProc(WPARAM wParam, LPARAM lParam) noexcept override;
     void OnCommand(WPARAM wParam) noexcept override;
-    //virtual LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept override;
+    virtual LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept override;
 public:
     ExternalAppNotifyicon(HINSTANCE hInstance, HWND externalWindow);
     HWND GetExternalHWnd() const noexcept;

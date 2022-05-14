@@ -3,15 +3,6 @@
 GlobalWindowInput *GlobalWindowInput::instance = nullptr;
 
 
-LRESULT CALLBACK LowLevelMouseHookProc(int nCode, WPARAM wParam, LPARAM lParam){
-    if(nCode < 0) 
-        return CallNextHookEx(NULL, nCode, wParam, lParam);
-    else
-        if(GlobalWindowInput::instance->mouseLL.OnMouseHookLL((MouseMessages)wParam, (MSLLHOOKSTRUCT*)lParam) == false) return 0;
-        
-    return CallNextHookEx(NULL, nCode, wParam, lParam);
-}
-
 LRESULT CALLBACK LowLevelkeyboardHookProc(int nCode, WPARAM wParam, LPARAM lParam){
     if(nCode < 0) 
         return CallNextHookEx(NULL, nCode, wParam, lParam);
@@ -20,19 +11,15 @@ LRESULT CALLBACK LowLevelkeyboardHookProc(int nCode, WPARAM wParam, LPARAM lPara
     return CallNextHookEx(NULL, nCode, wParam, lParam);
 }
 
-GlobalWindowInput::GlobalWindowInput(MouseLowLevelHandler& mouseLL, KeyboardLowLevelHandler &keyboardLL):mouseLL(mouseLL), keyboardLL(keyboardLL){
-    mouseHook = SetWindowsHookEx(WH_MOUSE_LL, LowLevelMouseHookProc, NULL, 0);
-    if(mouseHook == nullptr)
-        throw std::runtime_error("cannot register WH_MOUSE_LL");
-    
-    mouseHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelkeyboardHookProc, NULL, 0);
-    if(mouseHook == nullptr)
+GlobalWindowInput::GlobalWindowInput(KeyboardLowLevelHandler &keyboardLL):keyboardLL(keyboardLL){
+    keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelkeyboardHookProc, NULL, 0);
+    if(keyboardHook == nullptr)
         throw std::runtime_error("cannot register WH_KEYBOARD_LL");
 }
 
-void GlobalWindowInput::Init(MouseLowLevelHandler &mouseLL, KeyboardLowLevelHandler &keyboardLL){
+void GlobalWindowInput::Init(KeyboardLowLevelHandler &keyboardLL){
     if(instance == nullptr)
-        instance = new GlobalWindowInput(mouseLL, keyboardLL);
+        instance = new GlobalWindowInput(keyboardLL);
     else
         throw std::logic_error("InputManager is already initialized");
 }
@@ -46,7 +33,7 @@ void GlobalWindowInput::Dispose(){
 }
 
 GlobalWindowInput::~GlobalWindowInput() noexcept{
-    UnhookWindowsHookEx(mouseHook);
+    UnhookWindowsHookEx(keyboardHook);
 }
 
 

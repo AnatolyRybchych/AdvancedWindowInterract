@@ -7,6 +7,7 @@ void ExternalAppNotifyicon::NotifyiconProc(WPARAM wParam, LPARAM lParam) noexcep
     switch (lParam)
     {
     case WM_LBUTTONUP:
+        if(IsWindow(GetExternalHWnd()) == false) Hide();
         if(IsWindowVisible(GetExternalHWnd())){
             ShowWindow(GetExternalHWnd(), SW_HIDE);
         }
@@ -16,9 +17,12 @@ void ExternalAppNotifyicon::NotifyiconProc(WPARAM wParam, LPARAM lParam) noexcep
         }
         break;
     }
+}
 
-    if(IsWindow(GetExternalHWnd()) == false)
-        Hide();
+LRESULT ExternalAppNotifyicon::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept{
+    if(msg == WM_TIMER && !IsWindow(GetExternalHWnd())) Hide();
+
+    return Notifyicon::WndProc(hWnd, msg, wParam, lParam);
 }
 
 void ExternalAppNotifyicon::OnCommand(WPARAM wParam) noexcept{
@@ -42,6 +46,8 @@ ExternalAppNotifyicon::ExternalAppNotifyicon(HINSTANCE hInstance, HWND externalW
 
     SetIcon(NOT_NULL(icon, NOT_NULL(icon2, NOT_NULL(iconSm, NOT_NULL(iconSm2, LoadIcon(NULL, IDI_WINLOGO))))));
     SetInfo(title);
+
+    SetTimer(GetHWnd(), 0, 100, nullptr);
 }
 
 HWND ExternalAppNotifyicon::GetExternalHWnd() const noexcept{
