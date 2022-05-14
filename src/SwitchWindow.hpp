@@ -22,7 +22,7 @@ private:
     bool switchStatus = false;
     static int counter;
     
-    std::vector<std::function<void(bool)>> switchHandlers;
+    std::function<void(bool)> switchHandler;
 protected:
     LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept override;
     void OnSwitch(bool status) noexcept;
@@ -42,8 +42,9 @@ protected:
     RECT GetClientRect() const noexcept;
 public:
     SwitchWindow(HINSTANCE hInstance, int x, int y, int width, int height, std::wstring title, HWND parent);
+    void SetSwitchStatus(bool status) noexcept;
     bool GetSwitchStatus() const noexcept;
-    void AddOnSwitchHandler(std::function<void(bool)> onSwitch) noexcept;
+    void SetOnSwitchHandler(std::function<void(bool)> onSwitch) noexcept;
     void RemoveOnSwitchHandler(std::function<void(bool)> onSwitch) noexcept;
     virtual ~SwitchWindow();
 };

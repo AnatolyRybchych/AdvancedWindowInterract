@@ -12,8 +12,12 @@ private:
 
     SwitchWindow swTopmost;
     SwitchWindow swHideIcon;
-    SwitchWindow swAlttab;
+    SwitchWindow swNotifyicon;
 protected:
+    void OnSwitchTopmost(bool status) noexcept;
+    void OnSwitchHideIcon(bool status) noexcept;
+    void OnSwitchNotifyicon(bool status) noexcept;
+
     LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept override;
     void InspectWindowOver(HWND over) noexcept;
     void DefineWindowView() noexcept;

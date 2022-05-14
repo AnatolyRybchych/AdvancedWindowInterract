@@ -122,14 +122,10 @@ void SwitchWindow::OnMouseLeave() noexcept{
 
 void SwitchWindow::OnMouseDown() noexcept{
     if(isMouseDown == false){
-            isMouseDown = true;
-            if(isAnimation == false){
-                isAnimation = true;
-                OnSwitch(!switchStatus);
-                SetTimer(GetHWnd(), 0, 20, nullptr);
-            }
-            InvalidateRect(GetHWnd(), nullptr, true);
-        }
+        isMouseDown = true;
+        if(isAnimation == false)
+            OnSwitch(!switchStatus);
+    }
 }
 
 void SwitchWindow::OnMouseUp() noexcept{
@@ -232,14 +228,24 @@ SwitchWindow::SwitchWindow(HINSTANCE hInstance, int x, int y, int width, int hei
 
 void SwitchWindow::OnSwitch(bool status) noexcept{
     if(switchStatus == status) return;
+
+    SetSwitchStatus(status);
     
-    switchStatus = status;
-    for(auto switchHandler:switchHandlers)
-        if(switchHandler != 0) switchHandler(status);
+    switchHandler(status);
 }
 
-void SwitchWindow::AddOnSwitchHandler(std::function<void(bool)> onSwitch) noexcept{
-    switchHandlers.push_back(onSwitch);
+void SwitchWindow::SetSwitchStatus(bool status) noexcept{
+    switchStatus = status;
+
+    if(isAnimation == false){
+        isAnimation = true;
+        SetTimer(GetHWnd(), 0, 20, nullptr);
+    }
+    InvalidateRect(GetHWnd(), nullptr, true);
+}
+
+void SwitchWindow::SetOnSwitchHandler(std::function<void(bool)> onSwitch) noexcept{
+    switchHandler = onSwitch;
 }
 
 void SwitchWindow::RemoveOnSwitchHandler(std::function<void(bool)> onSwitch) noexcept{

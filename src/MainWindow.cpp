@@ -5,7 +5,7 @@ MainWindow::MainWindow(HINSTANCE hInstance)
     , content(hInstance, GetHWnd())
     , swTopmost(hInstance, 0, 0, 100, 100, L"Top most", content.GetHWnd())
     , swHideIcon(hInstance, 0, 0, 100, 100, L"Hide icon", content.GetHWnd())
-    , swAlttab(hInstance, 0, 0, 100, 100, L"Alt tab", content.GetHWnd())
+    , swNotifyicon(hInstance, 0, 0, 100, 100, L"Alt tab", content.GetHWnd())
 {
     windowOverParams = nullptr;
 
@@ -13,8 +13,31 @@ MainWindow::MainWindow(HINSTANCE hInstance)
 
     ShowWindow(swTopmost.GetHWnd(), SW_NORMAL);
     ShowWindow(swHideIcon.GetHWnd(), SW_NORMAL);
-    ShowWindow(swAlttab.GetHWnd(), SW_NORMAL);
+    ShowWindow(swNotifyicon.GetHWnd(), SW_NORMAL);
+
+    swTopmost.SetOnSwitchHandler(std::bind(OnSwitchTopmost, this, std::placeholders::_1));
+    swHideIcon.SetOnSwitchHandler(std::bind(OnSwitchHideIcon, this, std::placeholders::_1));
+    swNotifyicon.SetOnSwitchHandler(std::bind(OnSwitchNotifyicon, this, std::placeholders::_1));
 }
+
+void MainWindow::OnSwitchTopmost(bool status) noexcept{
+    if(windowOverParams != nullptr){
+        windowOverParams->SetTopmost(status);
+        swTopmost.SetSwitchStatus(windowOverParams->IsTopmost());
+    }
+}
+
+void MainWindow::OnSwitchHideIcon(bool status) noexcept{
+    if(windowOverParams != nullptr){
+        windowOverParams->SetHideIcon(status);
+        swHideIcon.SetSwitchStatus(windowOverParams->IsHideIcon());
+    }
+}
+
+void MainWindow::OnSwitchNotifyicon(bool status) noexcept{
+
+}
+
 
 
 LRESULT MainWindow::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept{

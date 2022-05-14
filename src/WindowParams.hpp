@@ -4,14 +4,17 @@
 class WindowParams{
 private:
     HWND hWnd;
-    bool isSystemWindow;
-    UINT windowStyles;
-    UINT windowExStyles;
 public:
     WindowParams(HWND window);
 
-    UINT GetWS();
-    UINT GetWS_EX();
+    bool IsTopmost() const noexcept;
+    bool IsHideIcon() const noexcept;
+
+    void SetTopmost(bool status) const noexcept;
+    void SetHideIcon(bool status) const noexcept;
+
+    UINT GetWS() const noexcept;
+    UINT GetWS_EX() const noexcept;
     bool IsSystemWindow() const noexcept;
     HWND GetHWnd() const noexcept;
 };
