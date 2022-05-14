@@ -74,6 +74,10 @@ void MainWindow::Show(HWND over) noexcept{
     RECT windowOverRect;
     GetWindowRect(windowOverParams->GetHWnd(), &windowOverRect);
 
+    SIZE contentSize = content.GetContentSize();
+    if(windowOverRect.right - windowOverRect.left < contentSize.cx || windowOverRect.bottom - windowOverRect.top < contentSize.cy)
+        return;
+
     DefineWindowView();
     ShowWindow(GetHWnd(), SW_NORMAL);
 }
