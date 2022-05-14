@@ -30,7 +30,7 @@ void WindowParams::SetHideIcon(bool status) const noexcept{
 
     ShowWindow(GetHWnd(), SW_HIDE);
     SetWindowLong(GetHWnd(), GWL_EXSTYLE, styles);
-    ShowWindow(GetHWnd(), SW_NORMAL);
+    ShowWindow(GetHWnd(), SW_SHOW);
 }
 
 UINT WindowParams::GetWS() const noexcept{
