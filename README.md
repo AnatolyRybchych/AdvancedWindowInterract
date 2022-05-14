@@ -1,5 +1,5 @@
 # AdvancedWindwoInterract
-
+* Portable file | only executable .exe
 ## Press Alt + Win to open window settings
 ![menu demo](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/thumbnail_application_menu.gif)
 
