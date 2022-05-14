@@ -51,14 +51,16 @@ bool App::OnKeyDown(KBDLLHOOKSTRUCT *args){
         switch (args->vkCode)
         {
         case VK_MENU:
-        case VK_LMENU:{
-            if(isAltDown == false){   
-                POINT cursorPos;
-                if(GetCursorPos(&cursorPos))
-                    window.Show(GetAncestor(WindowFromPoint(cursorPos), GA_ROOTOWNER));
-            }
+        case VK_LMENU:
             isAltDown = true;
-        }break;
+        break;
+        case VK_LWIN:
+        case VK_RWIN:{
+            if(isAltDown){   
+                POINT cursorPos;
+                if(GetCursorPos(&cursorPos)) window.Show(GetAncestor(WindowFromPoint(cursorPos), GA_ROOTOWNER));
+            }
+        }
         }
         return true;
     }

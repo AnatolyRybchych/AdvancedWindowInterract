@@ -81,6 +81,7 @@ void MainWindow::DefineWindowView() noexcept{
 }
 
 void MainWindow::Show(HWND over) noexcept{
+    if(IsWindowVisible(GetHWnd())) return;
     InspectWindowOver(over);
     if(windowOverParams == nullptr || windowOverParams->IsSystemWindow()) return;
 
