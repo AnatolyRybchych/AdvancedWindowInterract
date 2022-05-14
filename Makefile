@@ -21,6 +21,7 @@ run: build
 	./build/$(out)
 
 build/obj/%.o: src/%.cpp
+	@mkdir -p ./build/obj
 	g++ -c -o $@ $<
 
 .PHONY: build run
