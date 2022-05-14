@@ -1,9 +1,11 @@
 #pragma once
 
+
 #include "Window.hpp"
 #include "WindowParams.hpp"
 #include "HorisontalStackPanel.hpp"
 #include "SwitchWindow.hpp"
+#include "ExternalAppNotifyicons.hpp"
 
 class MainWindow: public Window{
 private:
@@ -13,6 +15,7 @@ private:
     SwitchWindow swTopmost;
     SwitchWindow swHideIcon;
     SwitchWindow swNotifyicon;
+    ExternalAppNotifyicons notifyicons;
 protected:
     void OnSwitchTopmost(bool status) noexcept;
     void OnSwitchHideIcon(bool status) noexcept;

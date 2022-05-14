@@ -5,7 +5,8 @@ MainWindow::MainWindow(HINSTANCE hInstance)
     , content(hInstance, GetHWnd())
     , swTopmost(hInstance, 0, 0, 100, 100, L"Top most", content.GetHWnd())
     , swHideIcon(hInstance, 0, 0, 100, 100, L"Hide icon", content.GetHWnd())
-    , swNotifyicon(hInstance, 0, 0, 100, 100, L"Alt tab", content.GetHWnd())
+    , swNotifyicon(hInstance, 0, 0, 100, 100, L"Notifyicon", content.GetHWnd())
+    , notifyicons(hInstance)
 {
     windowOverParams = nullptr;
 
@@ -38,7 +39,12 @@ void MainWindow::OnSwitchHideIcon(bool status) noexcept{
 }
 
 void MainWindow::OnSwitchNotifyicon(bool status) noexcept{
+    if(windowOverParams != nullptr){
+        if(status) notifyicons.Add(windowOverParams->GetHWnd());
+        else notifyicons.Remove(windowOverParams->GetHWnd());
 
+        swNotifyicon.SetSwitchStatus(notifyicons.Has(windowOverParams->GetHWnd()));
+    }
 }
 
 
@@ -66,6 +72,10 @@ void MainWindow::DefineWindowView() noexcept{
     RECT wndRect;
     GetWindowRect(windowOverParams->GetHWnd(), &wndRect);
     SetWindowPos(GetHWnd(), HWND_TOPMOST, wndRect.left, wndRect.top, wndRect.right - wndRect.left, wndRect.bottom - wndRect.top, 0);
+
+    swTopmost.SetSwitchStatus(windowOverParams->IsTopmost());
+    swHideIcon.SetSwitchStatus(windowOverParams->IsHideIcon());
+    swNotifyicon.SetSwitchStatus(notifyicons.Has(windowOverParams->GetHWnd()));
 
     content.Validate();
 }

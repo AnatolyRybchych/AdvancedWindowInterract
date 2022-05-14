@@ -84,6 +84,7 @@ void Notifyicon::Hide() const noexcept{
     
 
 Notifyicon::~Notifyicon(){
+    Hide();
     NOTIFYICONDATA notifyiconData;
     memset(&notifyiconData, 0, sizeof(notifyiconData));
     notifyiconData.cbSize = sizeof(notifyiconData);

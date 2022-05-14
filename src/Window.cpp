@@ -34,5 +34,6 @@ HWND Window::GetHWnd() const noexcept{
 }
 
 Window::~Window(){
-
+    SetWindowLongPtr(GetHWnd(), 0, 0);
+    DestroyWindow(GetHWnd());
 }

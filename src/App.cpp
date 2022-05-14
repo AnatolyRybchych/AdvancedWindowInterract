@@ -1,18 +1,36 @@
 #include "App.hpp"
 
+#include "Icon.hpp"
+
 App::App(HINSTANCE hInstance) :appNotifyicon(hInstance), window(hInstance){
     this->hInstance = hInstance;
     isAltDown = false;
 }
+
+static HICON CreateAppIcon() noexcept{
+
+    HBITMAP bmp = CreateBitmap(APP_ICON_WIDTH, APP_ICON_HEIGHT, 1, 32, AppIcon);
+    HBITMAP bmpMask = CreateBitmap(APP_ICON_WIDTH, APP_ICON_HEIGHT, 1, 1, nullptr);
+
+    ICONINFO ii = {TRUE};
+    ii.hbmColor = bmp;
+    ii.hbmMask = bmpMask;
+
+    HICON icon= CreateIconIndirect(&ii);
+
+    DeleteObject(bmp);
+    DeleteObject(bmpMask);
+
+    return icon;
+};
 
 int App::Run(){
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
     GlobalWindowInput::Init(*this, *this);
-    appNotifyicon.SetIcon(LoadIcon(NULL, IDI_APPLICATION));
+    appNotifyicon.SetIcon(CreateAppIcon());
     int exitCode = StartWindowLoop();
-
 
     GlobalWindowInput::Dispose();
     Gdiplus::GdiplusShutdown(gdiplusToken);

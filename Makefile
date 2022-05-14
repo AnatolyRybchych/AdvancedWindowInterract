@@ -11,6 +11,8 @@ objects += build/obj/MainWindow.o
 objects += build/obj/WindowParams.o
 objects += build/obj/SwitchWindow.o
 objects += build/obj/HorisontalStackPanel.o
+objects += build/obj/ExternalAppNotifyicon.o
+objects += build/obj/ExternalAppNotifyicons.o
 
 build: $(objects)
 	g++ -o build/$(out) $^ -lgdi32 -lgdiplus
