@@ -13,6 +13,6 @@
 * press notifyicon to show / hide binded window
 
 ![notifyicons of external applications](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/thumbnail_external_notifyicons.png)
-## To exit button on notifyicon to exit:
+## Press exit button on notifyicon to exit:
 ![application notifyicon](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/thumbnail_notifyicon.png) 
 ![application exit button](https://github.com/AnatolyRybchych/AdvancedWindowInterract/blob/main/thumbnails/thumbnail_application_exit_button.png)
